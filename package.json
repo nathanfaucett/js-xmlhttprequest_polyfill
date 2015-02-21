@@ -21,9 +21,7 @@
     "mocha": "^2.1.0"
   },
   "dependencies": {
-    "index_of": "nathanfaucett/index_of",
     "extend": "nathanfaucett/extend",
-    "is_function": "nathanfaucett/is_function",
     "empty_function": "nathanfaucett/empty_function",
     "environment": "nathanfaucett/environment"
   }
