@@ -25,7 +25,6 @@
   },
   "dependencies": {
     "extend": "nathanfaucett/extend",
-    "empty_function": "nathanfaucett/empty_function",
     "environment": "nathanfaucett/environment"
   }
 }

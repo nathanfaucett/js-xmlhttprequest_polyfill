@@ -1,5 +1,4 @@
 var extend = require("extend"),
-    emptyFunction = require("empty_function"),
     environment = require("environment");
 
 
@@ -45,12 +44,14 @@ var window = environment.window,
     XMLHttpRequestPolyfillPrototype = XMLHttpRequestPolyfill.prototype;
 
 
-XMLHttpRequestPolyfillPrototype.nativeSetRequestHeader = XMLHttpRequestPolyfillPrototype.setRequestHeader || emptyFunction;
+if (XMLHttpRequestPolyfillPrototype.setRequestHeader) {
+    XMLHttpRequestPolyfillPrototype.nativeSetRequestHeader = XMLHttpRequestPolyfillPrototype.setRequestHeader;
 
-XMLHttpRequestPolyfillPrototype.setRequestHeader = function setRequestHeader(key, value) {
-    (this.__requestHeaders__ || (this.__requestHeaders__ = {}))[key] = value;
-    return this.nativeSetRequestHeader(key, value);
-};
+    XMLHttpRequestPolyfillPrototype.setRequestHeader = function setRequestHeader(key, value) {
+        (this.__requestHeaders__ || (this.__requestHeaders__ = {}))[key] = value;
+        return this.nativeSetRequestHeader(key, value);
+    };
+}
 
 XMLHttpRequestPolyfillPrototype.getRequestHeader = function getRequestHeader(key) {
     return (this.__requestHeaders__ || (this.__requestHeaders__ = {}))[key];
