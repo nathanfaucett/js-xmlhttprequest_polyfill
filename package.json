@@ -6,6 +6,9 @@
     "type": "git",
     "url": "https://github.com/nathanfaucett/xmlhttprequest_polyfill.git"
   },
+  "scripts": {
+    "test": "comn -f __test__/test.js -o test/test.js"
+  },
   "main": "src/index.js",
   "keywords": [
     "xmlhttprequest_polyfill",

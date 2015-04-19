@@ -9,25 +9,25 @@ var window = environment.window,
 
     XMLHttpRequestPolyfill = (
         window.XMLHttpRequest ||
-        (function getRequestType(types) {
+        (function getRequestObjectType(types) {
             var i = -1,
                 il = types.length - 1,
-                instance, type;
+                instance, createType;
 
             while (i++ < il) {
                 try {
-                    type = types[i];
-                    instance = type();
+                    createType = types[i];
+                    instance = createType();
                     break;
                 } catch (e) {}
             }
 
-            if (!type) {
+            if (!createType) {
                 throw new Error("XMLHttpRequest not supported by this browser");
             }
 
             return function XMLHttpRequest() {
-                return type();
+                return createType();
             };
         }([
             function createActiveObject() {
@@ -40,21 +40,23 @@ var window = environment.window,
                 return new ActiveXObject("Microsoft.XMLHTTP");
             }
         ]))
-    );
+    ),
+
+    XMLHttpRequestPolyfillPrototype = XMLHttpRequestPolyfill.prototype;
 
 
-XMLHttpRequestPolyfill.prototype.nativeSetRequestHeader = XMLHttpRequestPolyfill.prototype.setRequestHeader || emptyFunction;
+XMLHttpRequestPolyfillPrototype.nativeSetRequestHeader = XMLHttpRequestPolyfillPrototype.setRequestHeader || emptyFunction;
 
-XMLHttpRequestPolyfill.prototype.setRequestHeader = function setRequestHeader(key, value) {
+XMLHttpRequestPolyfillPrototype.setRequestHeader = function setRequestHeader(key, value) {
     (this.__requestHeaders__ || (this.__requestHeaders__ = {}))[key] = value;
     return this.nativeSetRequestHeader(key, value);
 };
 
-XMLHttpRequestPolyfill.prototype.getRequestHeader = function getRequestHeader(key) {
+XMLHttpRequestPolyfillPrototype.getRequestHeader = function getRequestHeader(key) {
     return (this.__requestHeaders__ || (this.__requestHeaders__ = {}))[key];
 };
 
-XMLHttpRequestPolyfill.prototype.getRequestHeaders = function getRequestHeaders() {
+XMLHttpRequestPolyfillPrototype.getRequestHeaders = function getRequestHeaders() {
     return extend({}, this.__requestHeaders__);
 };
 
