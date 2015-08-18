@@ -7,7 +7,10 @@
     "url": "https://github.com/nathanfaucett/xmlhttprequest_polyfill.git"
   },
   "scripts": {
-    "test": "comn -f __test__/test.js -o test/test.js"
+    "test": "npm run test-node",
+    "test-node": "node ./test | ./node_modules/.bin/tap-spec",
+    "test-node-raw": "node ./test",
+    "test-browser-local": "zuul --local 8080 --ui tape -- ./test"
   },
   "main": "src/index.js",
   "keywords": [
@@ -21,10 +24,14 @@
     "grunt": "^0.4.5",
     "grunt-contrib-jshint": "^0.10.0",
     "grunt-jsbeautifier": "^0.2.7",
-    "mocha": "^2.1.0"
+    "tap-spec": "^4.0.0",
+    "tape": "^4.0.0",
+    "zuul": "^3.0.0"
   },
   "dependencies": {
-    "extend": "nathanfaucett/extend",
-    "environment": "nathanfaucett/environment"
+    "empty_function": "git://github.com/nathanfaucett/empty_function.git",
+    "environment": "git://github.com/nathanfaucett/environment.git",
+    "event_emitter": "git://github.com/nathanfaucett/event_emitter.git",
+    "extend": "git://github.com/nathanfaucett/extend.git"
   }
 }

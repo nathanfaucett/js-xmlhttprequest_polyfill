@@ -1,65 +1,97 @@
 var extend = require("extend"),
-    environment = require("environment");
+    environment = require("environment"),
+    emptyFunction = require("empty_function"),
+    createXMLHttpRequest = require("./createXMLHttpRequest");
 
 
 var window = environment.window,
 
-    ActiveXObject = window.ActiveXObject,
+    Uint8Array = window.Uint8Array || Array,
+
+    NativeXMLHttpRequest = window.XMLHttpRequest,
+    NativeActiveXObject = window.ActiveXObject,
 
     XMLHttpRequestPolyfill = (
-        window.XMLHttpRequest ||
-        (function getRequestObjectType(types) {
+        NativeXMLHttpRequest ||
+        (function getRequestObject(types) {
             var i = -1,
                 il = types.length - 1,
-                instance, createType;
+                instance, type;
 
             while (i++ < il) {
                 try {
-                    createType = types[i];
-                    instance = createType();
+                    type = types[i];
+                    instance = new NativeActiveXObject(type);
                     break;
                 } catch (e) {}
+                type = null;
             }
 
-            if (!createType) {
+            if (!type) {
                 throw new Error("XMLHttpRequest not supported by this browser");
             }
 
-            return function XMLHttpRequest() {
-                return createType();
-            };
+            return createXMLHttpRequest(function createNativeObject() {
+                return new NativeActiveXObject(type);
+            });
         }([
-            function createActiveObject() {
-                return new ActiveXObject("Msxml2.XMLHTTP");
-            },
-            function createActiveObject() {
-                return new ActiveXObject("Msxml3.XMLHTTP");
-            },
-            function createActiveObject() {
-                return new ActiveXObject("Microsoft.XMLHTTP");
-            }
+            "Msxml2.XMLHTTP",
+            "Msxml3.XMLHTTP",
+            "Microsoft.XMLHTTP"
         ]))
     ),
 
     XMLHttpRequestPolyfillPrototype = XMLHttpRequestPolyfill.prototype;
 
 
-if (XMLHttpRequestPolyfillPrototype.setRequestHeader) {
-    XMLHttpRequestPolyfillPrototype.nativeSetRequestHeader = XMLHttpRequestPolyfillPrototype.setRequestHeader;
+if (!XMLHttpRequestPolyfillPrototype.addEventListener || !XMLHttpRequestPolyfillPrototype.attachEvent) {
+    XMLHttpRequestPolyfill = createXMLHttpRequest(function createNativeObject() {
+        return new NativeXMLHttpRequest();
+    });
+    XMLHttpRequestPolyfillPrototype = XMLHttpRequestPolyfill.prototype;
+}
 
-    XMLHttpRequestPolyfillPrototype.setRequestHeader = function setRequestHeader(key, value) {
-        (this.__requestHeaders__ || (this.__requestHeaders__ = {}))[key] = value;
-        return this.nativeSetRequestHeader(key, value);
+XMLHttpRequestPolyfillPrototype.nativeSetRequestHeader = XMLHttpRequestPolyfillPrototype.setRequestHeader || emptyFunction;
+
+XMLHttpRequestPolyfillPrototype.setRequestHeader = function(key, value) {
+    (this.__requestHeaders || (this.__requestHeaders = {}))[key] = value;
+    this.nativeSetRequestHeader(key, value);
+};
+
+XMLHttpRequestPolyfillPrototype.getRequestHeader = function(key) {
+    return (this.__requestHeaders || (this.__requestHeaders = {}))[key];
+};
+
+XMLHttpRequestPolyfillPrototype.getRequestHeaders = function() {
+    return extend({}, this.__requestHeaders);
+};
+
+if (!XMLHttpRequestPolyfillPrototype.setTimeout) {
+    XMLHttpRequestPolyfillPrototype.setTimeout = function(ms) {
+        this.timeout = ms;
     };
 }
 
-XMLHttpRequestPolyfillPrototype.getRequestHeader = function getRequestHeader(key) {
-    return (this.__requestHeaders__ || (this.__requestHeaders__ = {}))[key];
-};
+if (!XMLHttpRequestPolyfillPrototype.setWithCredentials) {
+    XMLHttpRequestPolyfillPrototype.setWithCredentials = function(value) {
+        this.withCredentials = !!value;
+    };
+}
 
-XMLHttpRequestPolyfillPrototype.getRequestHeaders = function getRequestHeaders() {
-    return extend({}, this.__requestHeaders__);
-};
+if (!XMLHttpRequestPolyfillPrototype.sendAsBinary) {
+    XMLHttpRequestPolyfillPrototype.sendAsBinary = function(str) {
+        var length = str.length,
+            ui8 = new Uint8Array(length),
+            i = -1,
+            il = length - 1;
+
+        while (i++ < il) {
+            ui8[i] = str.charCodeAt(i) & 0xff;
+        }
+
+        return this.send(ui8);
+    };
+}
 
 
 module.exports = XMLHttpRequestPolyfill;

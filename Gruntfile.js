@@ -5,8 +5,7 @@ module.exports = function(grunt) {
             files: [
                 "Gruntfile.js",
                 "src/**/*.js",
-                "test/**/*.js",
-                "__test__/**/*.js"
+                "test/**/*.js"
             ]
         },
         jshint: {
@@ -22,8 +21,7 @@ module.exports = function(grunt) {
             files: [
                 "Gruntfile.js",
                 "src/**/*.js",
-                "__test__/**/*.js",
-                "!**/*.min.js"
+                "test/**/*.js"
             ]
         }
     });
