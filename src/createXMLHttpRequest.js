@@ -1,4 +1,5 @@
-var EventEmitter = require("event_emitter");
+var EventEmitter = require("event_emitter"),
+    toUint8Array = require("./toUint8Array");
 
 
 module.exports = createXMLHttpRequest;
@@ -58,7 +59,8 @@ function createXMLHttpRequest(createNativeObject) {
     XMLHttpRequestPrototype = XMLHttpRequest.prototype;
 
     function XMLHttpRequest_onReadyStateChange(_this, e) {
-        var nativeObject = _this.__nativeObject;
+        var nativeObject = _this.__nativeObject,
+            response;
 
         _this.readyState = nativeObject.readyState;
 
@@ -75,7 +77,13 @@ function createXMLHttpRequest(createNativeObject) {
                 _this.emit("progress", e);
                 break;
             case 4:
-                _this.response = nativeObject.response || "";
+                response = nativeObject.response || "";
+
+                if (_this.responseType === "arraybuffer") {
+                    response = toUint8Array(response);
+                }
+
+                _this.response = response;
                 _this.responseText = nativeObject.responseText || _this.response;
                 _this.responseType = nativeObject.responseType || "";
                 _this.responseURL = nativeObject.responseURL || "";

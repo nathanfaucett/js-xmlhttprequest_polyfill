@@ -1,12 +1,11 @@
 var extend = require("extend"),
     environment = require("environment"),
     emptyFunction = require("empty_function"),
-    createXMLHttpRequest = require("./createXMLHttpRequest");
+    createXMLHttpRequest = require("./createXMLHttpRequest"),
+    toUint8Array = require("./toUint8Array");
 
 
 var window = environment.window,
-
-    Uint8Array = window.Uint8Array || Array,
 
     NativeXMLHttpRequest = window.XMLHttpRequest,
     NativeActiveXObject = window.ActiveXObject,
@@ -44,7 +43,7 @@ var window = environment.window,
     XMLHttpRequestPolyfillPrototype = XMLHttpRequestPolyfill.prototype;
 
 
-if (!XMLHttpRequestPolyfillPrototype.addEventListener || !XMLHttpRequestPolyfillPrototype.attachEvent) {
+if (!(XMLHttpRequestPolyfillPrototype.addEventListener || XMLHttpRequestPolyfillPrototype.attachEvent)) {
     XMLHttpRequestPolyfill = createXMLHttpRequest(function createNativeObject() {
         return new NativeXMLHttpRequest();
     });
@@ -80,16 +79,7 @@ if (!XMLHttpRequestPolyfillPrototype.setWithCredentials) {
 
 if (!XMLHttpRequestPolyfillPrototype.sendAsBinary) {
     XMLHttpRequestPolyfillPrototype.sendAsBinary = function(str) {
-        var length = str.length,
-            ui8 = new Uint8Array(length),
-            i = -1,
-            il = length - 1;
-
-        while (i++ < il) {
-            ui8[i] = str.charCodeAt(i) & 0xff;
-        }
-
-        return this.send(ui8);
+        return this.send(toUint8Array(str));
     };
 }
 
