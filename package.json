@@ -8,7 +8,7 @@
   },
   "scripts": {
     "test": "npm run test-browser-local",
-    "test-browser-local": "zuul --local 8080 --ui tape -- ./test"
+    "test-browser-local": "zuul --local 9999 --ui tape -- ./test"
   },
   "main": "src/index.js",
   "keywords": [
@@ -26,7 +26,6 @@
     "zuul": "^3.2.0"
   },
   "dependencies": {
-    "empty_function": "git://github.com/nathanfaucett/empty_function.git",
     "environment": "git://github.com/nathanfaucett/environment.git",
     "event_emitter": "git://github.com/nathanfaucett/event_emitter.git",
     "extend": "git://github.com/nathanfaucett/extend.git"
