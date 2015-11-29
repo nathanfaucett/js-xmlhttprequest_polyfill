@@ -86,15 +86,18 @@ function XMLHttpRequestPolyfill_onReadyStateChange(_this, e) {
         case 4:
             response = nativeXMLHttpRequest.response || "";
 
-            if (_this.responseType === "arraybuffer") {
-                response = toUint8Array(response);
+            _this.response = response;
+
+            if (nativeXMLHttpRequest.responseType !== "arraybuffer") {
+                _this.responseText = nativeXMLHttpRequest.responseText || response;
+                _this.responseXML = nativeXMLHttpRequest.responseXML || response;
+            } else {
+                _this.responseText = "";
+                _this.responseXML = "";
             }
 
-            _this.response = response;
-            _this.responseText = nativeXMLHttpRequest.responseText || _this.response;
             _this.responseType = nativeXMLHttpRequest.responseType || "";
             _this.responseURL = nativeXMLHttpRequest.responseURL || "";
-            _this.responseXML = nativeXMLHttpRequest.responseXML || _this.response;
 
             _this.status = nativeXMLHttpRequest.status || 0;
             _this.statusText = nativeXMLHttpRequest.statusText || "";
@@ -162,6 +165,7 @@ XMLHttpRequestPolyfillPrototype.overrideMimeType = function(mimetype) {
 };
 
 XMLHttpRequestPolyfillPrototype.send = function(data) {
+    this.__nativeXMLHttpRequest.responseType = this.responseType;
     tryCallFunction(this.__nativeXMLHttpRequest, "send", data);
 };
 
