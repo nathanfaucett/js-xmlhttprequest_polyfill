@@ -72,9 +72,9 @@ function XMLHttpRequestPolyfill_onReadyStateChange(_this, e) {
     var nativeXMLHttpRequest = _this.__nativeXMLHttpRequest,
         response;
 
+    _this.status = nativeXMLHttpRequest.status || 0;
+    _this.statusText = nativeXMLHttpRequest.statusText || "";
     _this.readyState = nativeXMLHttpRequest.readyState;
-
-    emitEvent(_this, "readystatechange", new EventPolyfill("readystatechange", e));
 
     switch (nativeXMLHttpRequest.readyState) {
         case 1:
@@ -99,14 +99,13 @@ function XMLHttpRequestPolyfill_onReadyStateChange(_this, e) {
             _this.responseType = nativeXMLHttpRequest.responseType || "";
             _this.responseURL = nativeXMLHttpRequest.responseURL || "";
 
-            _this.status = nativeXMLHttpRequest.status || 0;
-            _this.statusText = nativeXMLHttpRequest.statusText || "";
-
             emitEvent(_this, "load", new EventPolyfill("load", e));
             emitEvent(_this, "loadend", new EventPolyfill("loadend", e));
 
             break;
     }
+
+    emitEvent(_this, "readystatechange", new EventPolyfill("readystatechange", e));
 
     return _this;
 }
