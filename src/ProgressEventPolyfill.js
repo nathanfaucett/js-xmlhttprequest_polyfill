@@ -1,4 +1,4 @@
-var inherits = require("inherits"),
+var inherits = require("@nathanfaucett/inherits"),
     EventPolyfill = require("./EventPolyfill");
 
 

@@ -1,5 +1,5 @@
-var extend = require("extend"),
-    EventEmitter = require("event_emitter"),
+var extend = require("@nathanfaucett/extend"),
+    EventEmitter = require("@nathanfaucett/event_emitter"),
     EventPolyfill = require("./EventPolyfill"),
     ProgressEventPolyfill = require("./ProgressEventPolyfill"),
     tryCallFunction = require("./tryCallFunction"),

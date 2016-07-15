@@ -1,4 +1,4 @@
-var environment = require("environment");
+var environment = require("@nathanfaucett/environment");
 
 
 var window = environment.window,
@@ -12,7 +12,7 @@ if (NativeXMLHttpRequest) {
         return new NativeXMLHttpRequest(options);
     };
 } else {
-    createNativeXMLHttpRequest = (function getNativeActiveXObject(types) {
+    (function getNativeActiveXObject(types) {
         var NativeActiveXObject = window.ActiveXObject,
             i = -1,
             il = types.length - 1,

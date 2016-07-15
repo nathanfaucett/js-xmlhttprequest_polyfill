@@ -1,4 +1,4 @@
-var environment = require("environment");
+var environment = require("@nathanfaucett/environment");
 
 
 var Uint8Array = environment.window.Uint8Array || Array;

@@ -1,5 +1,5 @@
 {
-  "name": "xmlhttprequest_polyfill",
+  "name": "@nathanfaucett/xmlhttprequest_polyfill",
   "version": "0.0.1",
   "description": "xmlhttprequest polyfill for the browser",
   "repository": {
@@ -19,15 +19,15 @@
   "license": "MIT",
   "readmeFilename": "README.md",
   "devDependencies": {
-    "grunt": "^0.4.5",
-    "grunt-contrib-jshint": "^0.10.0",
-    "grunt-jsbeautifier": "^0.2.7",
+    "grunt": "^1.0.1",
+    "grunt-contrib-jshint": "^1.0.0",
+    "grunt-jsbeautifier": "^0.2.13",
     "tape": "^4.2.0",
     "zuul": "^3.2.0"
   },
   "dependencies": {
-    "environment": "git://github.com/nathanfaucett/environment.git",
-    "event_emitter": "git://github.com/nathanfaucett/event_emitter.git",
-    "extend": "git://github.com/nathanfaucett/extend.git"
+    "@nathanfaucett/environment": "^0.0.1",
+    "@nathanfaucett/event_emitter": "^0.0.1",
+    "@nathanfaucett/extend": "^0.0.1"
   }
 }
