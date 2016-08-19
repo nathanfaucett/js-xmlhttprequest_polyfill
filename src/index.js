@@ -72,8 +72,6 @@ function XMLHttpRequestPolyfill_onReadyStateChange(_this, e) {
     var nativeXMLHttpRequest = _this.__nativeXMLHttpRequest,
         response;
 
-    _this.status = nativeXMLHttpRequest.status || 0;
-    _this.statusText = nativeXMLHttpRequest.statusText || "";
     _this.readyState = nativeXMLHttpRequest.readyState;
 
     switch (nativeXMLHttpRequest.readyState) {
@@ -87,6 +85,9 @@ function XMLHttpRequestPolyfill_onReadyStateChange(_this, e) {
             response = nativeXMLHttpRequest.response || "";
 
             _this.response = response;
+
+            _this.status = nativeXMLHttpRequest.status || 0;
+            _this.statusText = nativeXMLHttpRequest.statusText || "";
 
             if (nativeXMLHttpRequest.responseType !== "arraybuffer") {
                 _this.responseText = nativeXMLHttpRequest.responseText || response;
