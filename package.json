@@ -1,6 +1,6 @@
 {
   "name": "@nathanfaucett/xmlhttprequest_polyfill",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "xmlhttprequest polyfill for the browser",
   "repository": {
     "type": "git",
@@ -26,8 +26,8 @@
     "zuul": "^3.2.0"
   },
   "dependencies": {
-    "@nathanfaucett/environment": "^0.0.1",
-    "@nathanfaucett/event_emitter": "^0.0.1",
-    "@nathanfaucett/extend": "^0.0.1"
+    "@nathanfaucett/environment": "^0.0.2",
+    "@nathanfaucett/event_emitter": "^0.0.2",
+    "@nathanfaucett/extend": "^0.0.2"
   }
 }
